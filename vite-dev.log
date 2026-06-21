@@ -1,0 +1,35 @@
+
+> helm@1.1.1 dev
+> vite
+
+[dotenv][DEBUG] did not match key and value when parsing line 1: # 本地环境
+[dotenv][DEBUG] did not match key and value when parsing line 3: 
+[dotenv][DEBUG] did not match key and value when parsing line 4: # 本地环境接口地址
+[dotenv][DEBUG] did not match key and value when parsing line 5: #old one
+[dotenv][DEBUG] did not match key and value when parsing line 6: # VITE_API_URL = 'http://127.0.0.1:7788'
+[dotenv][DEBUG] did not match key and value when parsing line 7: # VITE_API_URL = 'http://localhost:7789'
+[dotenv][DEBUG] did not match key and value when parsing line 8: # VITE_API_URL = 'http://103.145.39.46:8080'
+[dotenv][DEBUG] did not match key and value when parsing line 9: # 注意：1.http://localhost:7789/api这个地址是访问后台的，
+[dotenv][DEBUG] did not match key and value when parsing line 10: #2.这里要带个'/api1'，因为vite.config.ts里面配置的proxy用这个进行匹配，然后根据rewrite去掉api，就用代理的地址来访问后台了
+[dotenv][DEBUG] did not match key and value when parsing line 11: #  VITE_API_URL = 'http://localhost:7789/api1'
+[dotenv][DEBUG] did not match key and value when parsing line 13:  # VITE_API_URL = 'https://www.gdjtypt.com/vueback'
+[dotenv][DEBUG] did not match key and value when parsing line 14: # VITE_API_URL = 'https://www.zhjtypt.com/vueback/api2'
+[dotenv][DEBUG] did not match key and value when parsing line 15: #vxe-table使用的：
+[dotenv][DEBUG] did not match key and value when parsing line 17: 
+[dotenv][DEBUG] did not match key and value when parsing line 1: # port 端口号,网站端口
+[dotenv][DEBUG] did not match key and value when parsing line 3: 
+[dotenv][DEBUG] did not match key and value when parsing line 4: # open 运行 npm run dev 时自动打开浏览器
+[dotenv][DEBUG] did not match key and value when parsing line 6: 
+[dotenv][DEBUG] did not match key and value when parsing line 7: # public path 配置线上环境路径（打包）、本地通过 http-server 访问时，请置空即可
+[dotenv][DEBUG] did not match key and value when parsing line 9: 
+
+  vite v2.6.14 dev server running at:
+
+  > Network:  http://26.201.95.108:7789/
+  > Network:  http://192.168.56.1:7789/
+  > Network:  http://10.213.115.181:7789/
+  > Network:  http://192.168.92.210:7789/
+  > Local:    http://localhost:7789/
+
+  ready in 1531ms.
+

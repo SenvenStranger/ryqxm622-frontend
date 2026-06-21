@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head><title>路由诊断</title></head>
+<body>
+<h1>路由诊断工具</h1>
+<pre id="output"></pre>
+
+<script>
+// 模拟 dynamicImport 的逻辑
+function diagnose() {
+    const output = document.getElementById('output');
+    
+    // 假设的 keys（从 import.meta.glob 获取）
+    const sampleKeys = [
+        '../views/teach/scientific/project.vue',
+        '../views/device/falldowndevice/index.vue',
+        '../views/home/index.vue',
+    ];
+    
+    // 测试匹配 'teach/scientific/project'
+    const component = 'teach/scientific/project';
+    
+    output.innerHTML += '=== 诊断开始 ===\n\n';
+    output.innerHTML += `目标组件: ${component}\n\n`;
+    
+    output.innerHTML += '所有可用的文件:\n';
+    sampleKeys.forEach(k => output.innerHTML += `  - ${k}\n`);
+    
+    output.innerHTML += '\n=== 匹配过程 ===\n';
+    
+    const matchKeys = sampleKeys.filter((key) => {
+        const k = key.replace(/..\/views|../, '');
+        output.innerHTML += `\n处理 key: ${key}\n`;
+        output.innerHTML += `  替换后: "${k}"\n`;
+        output.innerHTML += `  以 "${component}" 开头? ${k.startsWith(component)}\n`;
+        output.innerHTML += `  以 "/${component}" 开头? ${k.startsWith('/' + component)}\n`;
+        return k.startsWith(`${component}`) || k.startsWith(`/${component}`);
+    });
+    
+    output.innerHTML += `\n=== 匹配结果 ===\n`;
+    output.innerHTML += `匹配数量: ${matchKeys.length}\n`;
+    if (matchKeys.length > 0) {
+        output.innerHTML += `匹配到的文件: ${matchKeys[0]}\n`;
+        output.innerHTML += '✅ 匹配成功!\n';
+    } else {
+        output.innerHTML += '❌ 匹配失败!\n';
+    }
+}
+
+diagnose();
+</script>
+
+<style>
+body { font-family: monospace; padding: 20px; }
+pre { background: #f5f5f5; padding: 15px; border-radius: 8px; }
+</style>
+</body>
+</html>

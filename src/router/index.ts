@@ -53,8 +53,8 @@ export function initBackEndControlRoutes() {
 	}
 	store.dispatch('userInfos/setUserInfos'); // 触发初始化用户信息
 	let menuRoute = Session.get('menus')
-	if (!menuRoute) {
-		menuRoute = getBackEndControlRoutes(); // 获取路由
+	if (!menuRoute) {//没有获取到 he
+		menuRoute = getBackEndControlRoutes(); // 去后端获取路由
 	}
 	let drs = [
 		{
@@ -65,8 +65,8 @@ export function initBackEndControlRoutes() {
 			meta: {
 				isKeepAlive: true,
 			},
-			children: [
-				{
+			children: [//菜单项
+				{//第一个是主页，这里写死加主页 he
 					path: '/home',
 					name: 'home',
 					component: () => import('/@/views/home/index.vue'),
@@ -83,8 +83,10 @@ export function initBackEndControlRoutes() {
 			],
 		},
 	]
+	//加上其他菜单（menuRoute）he
 	drs[0].children = drs[0].children?.concat(backEndRouterConverter(menuRoute))
-	// @ts-ignore
+	// @ts-ignore 案例演示部分 he
+	//实际系统是不需要这些的，那么下面这句注释掉就不再有案例菜单了！ he 2022.1.2
 	drs[0].children?.push( staticPageRoutes[0] );
 	// 添加404界面
 	router.addRoute(pathMatch);
@@ -92,6 +94,7 @@ export function initBackEndControlRoutes() {
 	formatTwoStageRoutes(formatFlatteningRoutes(drs)).forEach((route: any) => {
 		router.addRoute((route as unknown) as RouteRecordRaw);
 	});
+	//把所有的菜单节点异步提交到设置路由setRoutesList ？？  he
 	store.dispatch('routesList/setRoutesList', drs[0].children);
 
 	let authsRoutes = setFilterHasAuthMenu(drs, store.state.userInfos.userInfos.authPageList);
@@ -100,7 +103,7 @@ export function initBackEndControlRoutes() {
 }
 
 /**
- * 请求后端路由菜单接口
+ * 请求后端路由菜单接口（去后台获取 he）
  * @description isRequestRoutes 为 true，则开启后端控制路由
  * @returns 返回后端路由菜单数据
  */
@@ -112,6 +115,8 @@ export function getBackEndControlRoutes() {
 export function backEndRouterConverter(routes: any, parentPath: string = "/") {
 	if (!routes) return;
 	return routes.map((item: any) => {
+		// 🔍 诊断：打印每个菜单项的路由信息
+		console.log(`📋 [路由转换] name=${item.name || '(空)'}, path=${item.path}, component=${item.component}`);
 		if (!item.meta.auth || item.meta.auth.length === 0){
 			delete item.meta.auth
 		}
@@ -120,6 +125,8 @@ export function backEndRouterConverter(routes: any, parentPath: string = "/") {
 			delete item.redirect
 		}
 		let path = item.path
+		if(path== null) //addby helm 这里如果不加这句，path为null会死掉 2022.1.2
+			path = "";
 		// 如果不是以 / 开头，则路径需要拼接父路径
 		if (!path.startsWith("/")) {
 			path = parentPath + "/" + path;
@@ -146,12 +153,27 @@ export function dynamicImport(dynamicViewsModules: Record<string, Function>, com
 		const k = key.replace(/..\/views|../, '');
 		return k.startsWith(`${component}`) || k.startsWith(`/${component}`);
 	});
+	// 🔍 诊断日志：查看每次组件解析的输入和输出
+	console.group(`🔍 [dynamicImport] 查找组件: "${component}"`);
+	console.log('匹配到的文件:', matchKeys);
 	if (matchKeys?.length === 1) {
 		const matchKey = matchKeys[0];
+		console.log('✅ 唯一匹配:', matchKey);
+		console.groupEnd();
 		return dynamicViewsModules[matchKey];
 	}
 	if (matchKeys?.length > 1) {
-		return false;
+		console.error(`⚠️ 多个文件匹配 "${component}"！使用第一个`);
+		console.error('所有匹配:', matchKeys);
+		console.groupEnd();
+		return dynamicViewsModules[matchKeys[0]];
+	}
+	if (matchKeys?.length === 0) {
+		console.error(`❌ 无匹配！component="${component}"，回退到Layout`);
+		console.error('可用文件列表(前20个):', keys.slice(0, 20));
+		console.log('完整可用文件列表:', keys);
+		console.groupEnd();
+		return Layout;
 	}
 }
 
