@@ -53,4 +53,5 @@ npm run build    # 构建生产版本
 ```
 
 ## 仓库地址
-https://github.com/SenvenStranger/ruoyi-teach.git
+前端：https://github.com/SenvenStranger/ryqxm622-frontend
+后端：https://github.com/SenvenStranger/ryqxm622-backend
